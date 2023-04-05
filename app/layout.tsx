@@ -1,5 +1,7 @@
 import Sidebar from "@/components/Sidebar";
 import "./globals.css";
+import Header from "@/components/Header";
+import ClientProvider from "@/components/ClientProvider";
 
 export const metadata = {
     title: "Web scraper app",
@@ -13,9 +15,14 @@ export default function RootLayout({
 }) {
     return (
         <html lang="en">
-            <body className="flex bg-[#F7FBFF] h-screen">
-                <Sidebar />
-                <main className="p10 max-w-7xl w-full  nx-auto overflow-y-auto ">{children}</main>
+            <body className="flex bg-[#F7FBFF] h-screen ">
+                <ClientProvider >
+                    <Sidebar />
+                    <main className="p10 max-w-full w-full nx-auto overflow-y-auto px-4 py-8">
+                        <Header />
+                        {children}
+                    </main>
+                </ClientProvider>
             </body>
         </html>
     );

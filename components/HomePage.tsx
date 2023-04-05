@@ -16,8 +16,6 @@ function HomePage() {
                     </a>
                 </h2>
             </div>
-
-
         </>
     );
 }

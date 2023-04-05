@@ -1,12 +1,9 @@
-import Header from "@/components/Header";
 import HomePage from "@/components/HomePage";
 
 export default function Home() {
     return (
-        <>
-             <Header />
-            <HomePage />
-
-        </>
+        <div className="min-h-screen flex-1">
+             <HomePage />
+        </div>
     );
 }
