@@ -54,24 +54,39 @@ function Header() {
                 start_eta: start_eta,
             };
 
-            let jsonData = JSON.stringify(body);
+            // let jsonData = JSON.stringify(body);
 
-            // console.log(jsonData);
+            // console.log("DEBUGGER_HEADER",jsonData);
 
-            for (let i = 0; i < 3; i++) {
-                const res2 = await fetch("/api/getData", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify(jsonData),
-                });
+            const MAX_RETRIES = 3;
+            const RETRY_DELAY_MS = 30000;
 
-                await new Promise((resolve) => setTimeout(resolve, 30000));
-                const data_Res_ = await res2.json();
-                toast.success("Scraper Started Successfully", {
-                    id: notification,
-                });
+            for (let i = 0; i < MAX_RETRIES; i++) {
+                try {
+                    const res2 = await fetch("/api/getData", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                        body: JSON.stringify(body),
+                    });
+
+                    const data_Res_ = await res2.json();
+                    toast.success("Scraper Started Successfully", {
+                        id: notification,
+                    });
+                    return data_Res_
+                } catch (error) {
+                    console.error("API call failed:", error);
+                    if (i === MAX_RETRIES - 1) {
+                        // All retries failed, throw an error or handle the failure
+                        throw error;
+                    }
+                    // Wait before trying again
+                    await new Promise((resolve) =>
+                        setTimeout(resolve, RETRY_DELAY_MS)
+                    );
+                }
             }
 
             // console.log("Searching Data.........", dataReq_);
