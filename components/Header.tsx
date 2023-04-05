@@ -6,7 +6,6 @@ import React from "react";
 import { FormEvent, useRef } from "react";
 import { toast } from "react-hot-toast";
 
-
 interface getDataType {
     success: boolean;
     search: string;
@@ -18,8 +17,6 @@ interface getDataType {
 function Header() {
     const inputRef = useRef<HTMLInputElement>(null);
     const router = useRouter();
-    const [attempts, setAttempts] = useState(0);
-
 
     const handleSearch = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -28,7 +25,7 @@ function Header() {
 
         if (!input) return;
 
-        const notification  = toast.loading(` Starting a Scraper for ${input}`)
+        const notification = toast.loading(` Starting a Scraper for ${input}`);
         if (inputRef?.current?.value) {
             inputRef.current.value = "";
         }
@@ -62,25 +59,25 @@ function Header() {
             // console.log(jsonData);
 
             for (let i = 0; i < 3; i++) {
-            const res2 = await fetch("/api/getData", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify(jsonData),
-            });
+                const res2 = await fetch("/api/getData", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify(jsonData),
+                });
 
-            await new Promise(resolve => setTimeout(resolve, 30000));
-            const data_Res_ = await res2.json();
-            toast.success("Scraper Started Successfully", {id: notification})
-        }
-
-
+                await new Promise((resolve) => setTimeout(resolve, 30000));
+                const data_Res_ = await res2.json();
+                toast.success("Scraper Started Successfully", {
+                    id: notification,
+                });
+            }
 
             // console.log("Searching Data.........", dataReq_);
             // console.log("Return data from webHook..", data_Res_);
         } catch (error) {
-            toast.error("Whoops... Something went wrong !")
+            toast.error("Whoops... Something went wrong !");
             console.log(error);
         }
     };
