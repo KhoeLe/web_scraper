@@ -2,11 +2,10 @@
 
 import { MagnifyingGlassIcon } from "@heroicons/react/24/solid";
 import { useRouter } from "next/navigation";
+import React from "react";
 import { FormEvent, useRef } from "react";
-import * as admin from "firebase-admin";
-import { adminDb } from "@/app/firebase/firebaseAdmin";
-import SearchPage from "@/app/search/[id]/page";
 import { toast } from "react-hot-toast";
+
 
 interface getDataType {
     success: boolean;
@@ -19,6 +18,8 @@ interface getDataType {
 function Header() {
     const inputRef = useRef<HTMLInputElement>(null);
     const router = useRouter();
+    const [attempts, setAttempts] = useState(0);
+
 
     const handleSearch = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -60,6 +61,7 @@ function Header() {
 
             // console.log(jsonData);
 
+            for (let i = 0; i < 3; i++) {
             const res2 = await fetch("/api/getData", {
                 method: "POST",
                 headers: {
@@ -68,8 +70,10 @@ function Header() {
                 body: JSON.stringify(jsonData),
             });
 
+            await new Promise(resolve => setTimeout(resolve, 30000));
             const data_Res_ = await res2.json();
             toast.success("Scraper Started Successfully", {id: notification})
+        }
 
 
 
